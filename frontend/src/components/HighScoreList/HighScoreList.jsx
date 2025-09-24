@@ -8,19 +8,8 @@ export default function HighScoreList() {
     const apiUrl = import.meta.env.VITE_API_LINK;
     const [error, setError] = useState()
     const { selectedPhoto } = useOutletContext()
-    const { topScores } = useOutletContext()
+    const { topScores, topBeachScores, topTownScores, topConventionScores } = useOutletContext()
     const [highScoreData, setHighScoreData] = useState([])
-
-    // useeffect to return all high scores
-    // useEffect(() => {
-    //     if(selectedPhoto===2) {
-    //         setHighScoreData(townHighScores)
-    //     } else if(selectedPhoto===3) {
-    //         setHighScoreData(beachHighScores)
-    //     } else if(selectedPhoto===4) {
-    //         setHighScoreData(conventionHighScores)
-    //     }
-    // }, []);
 
     console.log(highScoreData)
 
@@ -29,6 +18,21 @@ export default function HighScoreList() {
         <div className="high-score-section">
             <h1>High Scores</h1>
             <ol className="high-score-list">
+                {selectedPhoto===2 && 
+                    topTownScores.map((score, index) => (
+                    <b><li className="high-score-list-item">{ score.name }: { score.score } seconds.</li></b> 
+                    ))
+                }
+                {selectedPhoto===3 && 
+                    topBeachScores.map((score, index) => (
+                    <b><li className="high-score-list-item">{ score.name }: { score.score } seconds.</li></b> 
+                    ))
+                }
+                {selectedPhoto===4 && 
+                    topConventionScores.map((score, index) => (
+                    <b><li className="high-score-list-item">{ score.name }: { score.score } seconds.</li></b> 
+                    ))
+                }
                 {/* map the scores */}
                 { topScores.map((score, index) => (
                     <b><li className="high-score-list-item">{ score.name }: { score.score } seconds.</li></b> 

@@ -18,7 +18,6 @@ import { beachData, beachHighScores, conventionData, conventionHighScores, townD
 
 export default function Photo() {
     const navigate = useNavigate()
-    const apiUrl = import.meta.env.VITE_API_LINK;
 
     const { selectedPhoto, seconds, setSeconds } = useOutletContext()
     //data about selected image will be stored here (names, coordinates, etc.)
@@ -29,7 +28,6 @@ export default function Photo() {
     const [found, setFound] = useState([])
     const [showFoundMsg, setShowFoundMsg] = useState(false)
     const [showGuessAgain, setShowGuessAgain] = useState(false)
-    const [compareScore, setCompareScore] = useState(false)
     //found characters(display checkmarks)
     const [waldoFound, setWaldoFound] = useState(false)
     const [wizFound, setWizFound] = useState(false)
@@ -38,20 +36,19 @@ export default function Photo() {
 
     //for style items, etc.
     const [loading, setLoading] = useState(true)
-    const { error, setError } = useOutletContext()
     const [isBoxVisible, setIsBoxVisible] = useState(false)
     const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 })
     const { isRunning, setIsRunning } = useOutletContext()
     //high score/timer states
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [content, setContent] = useState('');
-    const { topScores, setTopScores } = useOutletContext()
+    const { topTownScores, setTopTownScores, topBeachScores, setTopBeachScores, topConventionScores, setTopConventionScores } = useOutletContext()
     const [gameStarted, setGameStarted] = useState(false)
     const [startTime, setStartTime] = useState(0);
     const [win, setWin] = useState(false)
     const [totalTime, setTotalTime] = useState(0)
 
-    //grab photo details and actual coordinates of waldo, etc. reset state variables
+    //grab photo details and actual coordinates of waldo, etc. from mock database
     useEffect(() => {
         //set photo data
         if(selectedPhoto===2) {
@@ -88,53 +85,18 @@ export default function Photo() {
             })
             setCharacterData(newArray)
         }
-
-        // fetch(`${apiUrl}/photo/${selectedPhoto}`, { 
-        //         method: 'GET',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },       
-        // })
-        // .then((response) => {
-        // if (response.status >= 400) {
-        //     throw new Error("server error");
-        // }
-        // return response.json();
-        // })
-        // .then((response) => {
-            // setPhotoData(response)
-            // //map the characters into an array so you can use it to set radio buttons
-            // let charArray = response.character
-            // let newArray = []
-            // charArray.map(data => {
-            //     let newItem = data
-            //     newArray.push(newItem)
-            // })
-            // setCharacterData(newArray)
             // // reset state variables
             setFound([]) 
             setLoading(false)
             setIsRunning(true)
             setWin(false)
             setIsModalOpen(false)
-            setCompareScore(false)
             setGameStarted(true)
-        // })
-        // .catch((error) => setError(error))
+
     }, []);
     
 
-    //pull top 10 highscores and setHighScores (to compare user's score to top 10)
-    useEffect(() => {
-        if(selectedPhoto===2) {
-            setTopScores(townHighScores)
-        } else if(selectedPhoto===3) {
-            setTopScores(beachHighScores)
-        } else if(selectedPhoto===4) {
-            setTopScores(conventionHighScores)
-        }
-
-    }, []);
+    //pull highscores from mock db and setHighScores (to compare user's score to top 10)
 
     //record the start after picture loads
     useEffect(() => {
@@ -145,9 +107,18 @@ export default function Photo() {
     //once start and end time are set, compare against top 10 scores, bring up high score modal if you qualify
     function compareScores(totalTime) {
         console.log('comparing score')
-        //if there are less than 10 high scores or user is in top 10
-        if((topScores.length < 10 || (totalTime < topScores[9].score)) && (totalTime > 0.2)) {
+        if(selectedPhoto===2) {
+            if((topTownScores.length < 10 || (totalTime < topTownScores[9].score)) && (totalTime > 0.2)) {
             setIsModalOpen(true)
+            }
+        } else if(selectedPhoto===3) {
+            if((topBeachScores.length < 10 || (totalTime < topBeachScores[9].score)) && (totalTime > 0.2)) {
+            setIsModalOpen(true)
+            }
+        } if(selectedPhoto===4) {
+            if((topConventionScores.length < 10 || (totalTime < topConventionScores[9].score)) && (totalTime > 0.2)) {
+            setIsModalOpen(true)
+            }
         }
     }
 
@@ -202,12 +173,20 @@ export default function Photo() {
     async function handleScoreSubmit(e){
         e.preventDefault();
         const newData = { name: content, score: totalTime }
-        let newArray = [...topScores, newData]
-        setTopScores(newArray)
+        if(selectedPhoto===2) {
+            let newArray = [...topTownScores, newData]
+            setTopTownScores(newArray)
+        } else if(selectedPhoto===3) {
+            let newArray = [...topBeachScores, newData]
+            setTopBeachScores(newArray)
+        } if(selectedPhoto===4) {
+            let newArray = [...topConventionScores, newData]
+            setTopConventionScores(newArray)
+        }
         navigate('/highscores')
     }
 
-    console.log(topScores)
+    console.log(topTownScores)
     return (
         <>
         <div className="photo-page">

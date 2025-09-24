@@ -23,24 +23,6 @@ export default function StartScreen() {
     // const [imageData, setImageData] = useState([])
     const { error, setError } = useOutletContext()
 
-    // useEffect(() => {
-    //     fetch(`${apiUrl}/photo/ImgUrls`, { 
-    //             method: 'GET',
-    //             })
-    //     .then((response) => {
-    //     if (response.status >= 400) {
-    //         throw new Error("server error");
-    //     }
-    //     return response.json();
-    //     })
-    //     .then((response) => {
-    //         console.log(response)
-    //         setImageData(response)
-    //         setLoading(false)
-    //     })
-    //     .catch((error) => setError(error))
-    // }, []);
-
     function handlePhotoSelect(id){
         setSelectedPhoto(id)
     }
