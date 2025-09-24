@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router'
 import 'ldrs/react/Ring.css'
 import TargetSelection from '../TargetSelection/TargetSelection';
 import { Link } from 'react-router';
+import { beachData, beachHighScores, conventionData, conventionHighScores, townData, townHighScores } from '../../db/MockDb';
 
 // if mock db
 // import waldoEasy from '../../assets/waldo-1-town.jpeg'
@@ -51,108 +52,103 @@ export default function Photo() {
     const [win, setWin] = useState(false)
     const totalTime = (endTime - startTime)/1000; //essentially the score
 
-
-    //for MOCK DB ()
-    //if statement 
-    //if (selected photo==3) -> setPhotoData(beachData) , etc.
-    //then run the charArray logic below on photoData and pass to CharacterList
-
     //grab photo details and actual coordinates of waldo, etc. reset state variables
     useEffect(() => {
-        fetch(`${apiUrl}/photo/${selectedPhoto}`, { 
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },       
-        })
-        .then((response) => {
-        if (response.status >= 400) {
-            throw new Error("server error");
+        //set photo data
+        if(selectedPhoto===2) {
+            setPhotoData(townData)
+        } else if(selectedPhoto===3) {
+            setPhotoData(beachData)
+        } else if(selectedPhoto===4) {
+            setPhotoData(conventionData)
         }
-        return response.json();
-        })
-        .then((response) => {
-            setPhotoData(response)
-            //map the characters into an array so you can use it to set radio buttons
-            let charArray = response.character
+
+        //set character data
+        if(selectedPhoto===2) {
+            let charArray = townData.character
             let newArray = []
             charArray.map(data => {
                 let newItem = data
                 newArray.push(newItem)
             })
             setCharacterData(newArray)
-            // reset state variables
-            setFound([]) 
+        } else if(selectedPhoto===3) {
+            let charArray = beachData.character
+            let newArray = []
+            charArray.map(data => {
+                let newItem = data
+                newArray.push(newItem)
+            })
+            setCharacterData(newArray)
+        } else if(selectedPhoto===4) {
+            let charArray = conventionData.character
+            let newArray = []
+            charArray.map(data => {
+                let newItem = data
+                newArray.push(newItem)
+            })
+            setCharacterData(newArray)
+        }
+
+        // fetch(`${apiUrl}/photo/${selectedPhoto}`, { 
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },       
+        // })
+        // .then((response) => {
+        // if (response.status >= 400) {
+        //     throw new Error("server error");
+        // }
+        // return response.json();
+        // })
+        // .then((response) => {
+            // setPhotoData(response)
+            // //map the characters into an array so you can use it to set radio buttons
+            // let charArray = response.character
+            // let newArray = []
+            // charArray.map(data => {
+            //     let newItem = data
+            //     newArray.push(newItem)
+            // })
+            // setCharacterData(newArray)
+            // // reset state variables
+            // setFound([]) 
             setLoading(false)
             setIsRunning(true)
             setWin(false)
             setIsModalOpen(false)
             setCompareScore(false)
             setGameStarted(true)
-        })
-        .catch((error) => setError(error))
+        // })
+        // .catch((error) => setError(error))
     }, []);
 
     //pull top 10 highscores and setHighScores (to compare user's score to top 10)
     useEffect(() => {
-        fetch(`${apiUrl}/score/${selectedPhoto}`, { 
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },      
-        })
-        .then((response) => {
-        if (response.status >= 400) {
-            throw new Error("server error");
+        if(selectedPhoto===2) {
+            setTopScores(townHighScores)
+        } else if(selectedPhoto===3) {
+            setTopScores(beachHighScores)
+        } else if(selectedPhoto===4) {
+            setTopScores(conventionHighScores)
         }
-        return response.json();
-        })
-        .then((response) => {
-            console.log('score' + response)
-            setTopScores(response)
-        })
-        .catch((error) => setError(error))
+
     }, []);
 
     //record the start after picture loads
     useEffect(() => {
-        fetch(`${apiUrl}/photo/gameStart`, { 
-                method: 'GET',
-                //put photo index OR PARAMS here from selected photo
-                })
-        .then((response) => {
-        if (response.status >= 400) {
-            throw new Error("server error");
-        }
-        return response.json();
-        })
-        .then((response) => {
-            console.log(response)
-            const startObject = new Date(response)
+            const startObject = new Date()
             setStartTime(startObject)
-        })
-        .catch((error) => setError(error))
     }, [gameStarted]);
 
     //record the end time when a win is registered
     useEffect(() => {
-        fetch(`${apiUrl}/photo/gameEnd`, { 
-                method: 'GET',
-                })
-        .then((response) => {
-        if (response.status >= 400) {
-            throw new Error("server error");
-        }
-        return response.json();
-        })
-        .then((response) => {
-            const endObject = new Date(response)
+            const endObject = new Date()
             setEndTime(endObject)   
             //trigger useEffect to compare scores
             setCompareScore(true)
             setIsRunning(false)
-        })
-        .catch((error) => setError(error))
     }, [win]);
 
     //once start and end time are set, compare against top 10 scores, bring up high score modal if you qualify

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import './HighScoreList.css'
 import { useOutletContext } from "react-router";
+import { beachData, beachHighScores, conventionData, conventionHighScores, townData, townHighScores } from '../../db/MockDb';
 
 // THIS NEEDS TO BE LINKED FROM THE GAME PAGE AND DISPLAY SCORES FOR THAT GAME
 export default function HighScoreList() {
@@ -11,19 +12,13 @@ export default function HighScoreList() {
 
     // useeffect to return all high scores
     useEffect(() => {
-        fetch(`${apiUrl}/score/highscores/${selectedPhoto}`, { 
-                method: 'GET',
-                })
-        .then((response) => {
-        if (response.status >= 400) {
-            throw new Error("server error");
+        if(selectedPhoto===2) {
+            setHighScoreData(townHighScores)
+        } else if(selectedPhoto===3) {
+            setHighScoreData(beachHighScores)
+        } else if(selectedPhoto===4) {
+            setHighScoreData(conventionHighScores)
         }
-        return response.json();
-        })
-        .then((response) => {
-            setHighScoreData(response)
-        })
-        .catch((error) => setError(error))
     }, []);
 
     console.log(highScoreData)

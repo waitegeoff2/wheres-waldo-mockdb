@@ -4,39 +4,42 @@ import './StartScreen.css'
 import { useNavigate } from 'react-router'
 import { Ring } from 'ldrs/react'
 import 'ldrs/react/Ring.css'
+import { imageData } from '../../db/MockDb'
 
 // MOCK DB VERSION:
-// import waldoEasy from '../../assets/waldo-1-town.jpeg'
-// import waldoBeach from '../../assets/waldo-2-beach.jpg'
-// import waldoConvention from '../../assets/waldo-3-convention.jpeg'
+import waldoEasy from '../../assets/waldo-1-town.jpeg'
+import waldoBeach from '../../assets/waldo-2-beach.jpg'
+import waldoConvention from '../../assets/waldo-3-convention.jpeg'
 
 export default function StartScreen() {
+
+    console.log(imageData)
     const apiUrl = import.meta.env.VITE_API_LINK;
     const { selectedPhoto, setSelectedPhoto } = useOutletContext()
-    const [loading, setLoading] = useState(true)
+    // const [loading, setLoading] = useState(true)
     //states for managing timer
     const { isRunning, setIsRunning } = useOutletContext()
     const navigate = useNavigate();
-    const [imageData, setImageData] = useState([])
+    // const [imageData, setImageData] = useState([])
     const { error, setError } = useOutletContext()
 
-    useEffect(() => {
-        fetch(`${apiUrl}/photo/ImgUrls`, { 
-                method: 'GET',
-                })
-        .then((response) => {
-        if (response.status >= 400) {
-            throw new Error("server error");
-        }
-        return response.json();
-        })
-        .then((response) => {
-            console.log(response)
-            setImageData(response)
-            setLoading(false)
-        })
-        .catch((error) => setError(error))
-    }, []);
+    // useEffect(() => {
+    //     fetch(`${apiUrl}/photo/ImgUrls`, { 
+    //             method: 'GET',
+    //             })
+    //     .then((response) => {
+    //     if (response.status >= 400) {
+    //         throw new Error("server error");
+    //     }
+    //     return response.json();
+    //     })
+    //     .then((response) => {
+    //         console.log(response)
+    //         setImageData(response)
+    //         setLoading(false)
+    //     })
+    //     .catch((error) => setError(error))
+    // }, []);
 
     function handlePhotoSelect(id){
         setSelectedPhoto(id)
@@ -50,17 +53,6 @@ export default function StartScreen() {
         <>
             <div className="game-start-page">
                 <h3>Choose a photo and find Waldo (and his weird friends)!</h3>
-                {loading ?
-                <div className="loading-square">
-                    <Ring
-                    size="40"
-                    stroke="5"
-                    bgOpacity="0"
-                    speed="2"
-                    color="black" 
-                    /> 
-                </div>
-                :
                 <div className="photo-selection">
                     {imageData.map((data, index) => (
                         <div key={data.id} className="game-preview">
@@ -72,11 +64,10 @@ export default function StartScreen() {
                         </div>
                     ))}
                 </div>
-                }
+
                 {/* FOR MOCK DB VERSION */}
                 {/* <div className="photo-selection">
                     <img className='game-preview-img' onClick={() => handlePhotoSelect(2)} src='/src/assets/waldo-1-town.jpeg' alt="Image of a where's waldo game in a town." />
-
                     <img className='game-preview-img' onClick={() => handlePhotoSelect(3)} src={waldoBeach} alt="Image of a where's waldo game on a beach." />
                     <img className='game-preview-img' onClick={() => handlePhotoSelect(4)} src={waldoConvention} alt="Image of a where's waldo game at a business convention." />
                 </div> */}
