@@ -26,6 +26,8 @@ export default function StartScreen() {
        navigate(`/photos/${selectedPhoto}`)
     }
 
+    console.log(import.meta.env.BASE_URL)
+
     return (
         <>
             <div className="game-start-page">
