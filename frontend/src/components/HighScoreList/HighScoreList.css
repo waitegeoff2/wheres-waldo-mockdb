@@ -1,0 +1,16 @@
+.high-score-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 20px;
+    width: 600px;
+}
+
+.high-score-list-item {
+    font-size: 20px;
+}

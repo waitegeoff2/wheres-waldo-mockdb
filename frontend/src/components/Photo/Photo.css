@@ -1,0 +1,135 @@
+.photo-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-box {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.main-image {
+  width: 960px;
+  height: 640px;
+  /* border: 5px solid black; */
+  margin: 10px 0;
+  object-fit: contain;
+  background-color: grey;
+}
+
+.found-msg, .guess-msg {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.loading-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 10px 0;
+    width: 960px;
+    height: 640px;
+    background-color: rgb(225, 225, 225);
+}
+
+.game-sidebar{ 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.character-score {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.char-icon {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.char-pic {
+    height: 30px;
+    width: 30px;
+}
+
+.check-mark {
+    height: 30px;
+    width: 30px;
+}
+
+/* add high score link formatting (right sidebar) */
+.high-score-section {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background-color: rgb(255, 158, 158);
+}
+
+.high-score-input {
+    display: flex;
+    gap: 2px;
+    font-size: 20px;
+}
+
+.high-score-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.high-score-link {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(254, 131, 131);
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.target-selection-section {
+    z-index: 1000;
+}
+
+.waldo-select {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(249, 123, 123, 0.85);
+    color: black;
+    gap: 3px;
+}
+
+.radio-field {
+    border: none;
+}
+
+.radios {
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+}
+
+.radio-input {
+    display: flex;
+}
+
+.arrow {
+    width: 0; 
+    height: 0; 
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgba(249, 123, 123, 0.85);
+}
