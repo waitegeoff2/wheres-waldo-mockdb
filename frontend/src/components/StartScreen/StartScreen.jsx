@@ -6,11 +6,6 @@ import { Ring } from 'ldrs/react'
 import 'ldrs/react/Ring.css'
 import { imageData } from '../../db/MockDb'
 
-// MOCK DB VERSION:
-import waldoEasy from '../../assets/waldo-1-town.jpeg'
-import waldoBeach from '../../assets/waldo-2-beach.jpg'
-import waldoConvention from '../../assets/waldo-3-convention.jpeg'
-
 export default function StartScreen() {
 
     console.log(imageData)
