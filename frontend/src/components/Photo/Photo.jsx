@@ -45,12 +45,11 @@ export default function Photo() {
     //high score/timer states
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [content, setContent] = useState('');
-    const [topScores, setTopScores] = useState([])
+    const { topScores, setTopScores } = useOutletContext()
     const [gameStarted, setGameStarted] = useState(false)
     const [startTime, setStartTime] = useState(0);
-    const [endTime, setEndTime] = useState(0)
     const [win, setWin] = useState(false)
-    const totalTime = (endTime - startTime)/1000; //essentially the score
+    const [totalTime, setTotalTime] = useState(0)
 
     //grab photo details and actual coordinates of waldo, etc. reset state variables
     useEffect(() => {
@@ -113,7 +112,7 @@ export default function Photo() {
             // })
             // setCharacterData(newArray)
             // // reset state variables
-            // setFound([]) 
+            setFound([]) 
             setLoading(false)
             setIsRunning(true)
             setWin(false)
@@ -123,6 +122,7 @@ export default function Photo() {
         // })
         // .catch((error) => setError(error))
     }, []);
+    
 
     //pull top 10 highscores and setHighScores (to compare user's score to top 10)
     useEffect(() => {
@@ -142,28 +142,26 @@ export default function Photo() {
             setStartTime(startObject)
     }, [gameStarted]);
 
-    //record the end time when a win is registered
-    useEffect(() => {
-            const endObject = new Date()
-            setEndTime(endObject)   
-            //trigger useEffect to compare scores
-            setCompareScore(true)
-            setIsRunning(false)
-    }, [win]);
-
     //once start and end time are set, compare against top 10 scores, bring up high score modal if you qualify
-    useEffect(() => {
+    function compareScores(totalTime) {
+        console.log('comparing score')
         //if there are less than 10 high scores or user is in top 10
         if((topScores.length < 10 || (totalTime < topScores[9].score)) && (totalTime > 0.2)) {
             setIsModalOpen(true)
         }
-    }, [compareScore]);
+    }
 
     function checkWin(foundLength) {
         if(foundLength>0 && (foundLength === characterData.length)) {
             console.log('you win')
             setShowFoundMsg(false)
+            setIsRunning(false)
             setWin(true)
+            const endObject = new Date()
+            const totalTime = (endObject - startTime)/1000;
+            setTotalTime(totalTime)
+            console.log(totalTime)
+            compareScores(totalTime)
         } else {
             console.log('no win')
         }
@@ -203,27 +201,13 @@ export default function Photo() {
 
     async function handleScoreSubmit(e){
         e.preventDefault();
-        try {
-            await fetch(`${apiUrl}/score/postscore`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                // Add any other necessary headers, e.g., Authorization tokens
-                },
-                body: JSON.stringify({ name: content, score: totalTime, photoId: selectedPhoto }),
-            })
-            .then((response) => {
-                return response.json();
-            })
-            .then((response) => {   
-                console.log(response)
-            })
-            navigate('/highscores')
-        } catch(error) {
-            console.log(error)
-        }
+        const newData = { name: content, score: totalTime }
+        let newArray = [...topScores, newData]
+        setTopScores(newArray)
+        navigate('/highscores')
     }
 
+    console.log(topScores)
     return (
         <>
         <div className="photo-page">

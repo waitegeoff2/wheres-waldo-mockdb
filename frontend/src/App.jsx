@@ -11,6 +11,8 @@ function App() {
   const [isRunning, setIsRunning] = useState(false)
   const [seconds, setSeconds] = useState(0)
   const [error, setError] = useState()
+  const [topScores, setTopScores] = useState([])
+  
 
   function stopTimer(){
         setIsRunning(false)
@@ -20,7 +22,7 @@ function App() {
   return (
     <>
       <NavBar setIsRunning={setIsRunning} setSeconds={setSeconds} stopTimer={stopTimer}/>
-      <Outlet context={{selectedPhoto, setSelectedPhoto, isRunning, setIsRunning, error, setError, seconds, setSeconds}} />
+      <Outlet context={{selectedPhoto, setSelectedPhoto, isRunning, setIsRunning, error, setError, seconds, setSeconds, topScores, setTopScores}} />
       <Footer />
     </>
   )

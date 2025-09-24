@@ -8,18 +8,19 @@ export default function HighScoreList() {
     const apiUrl = import.meta.env.VITE_API_LINK;
     const [error, setError] = useState()
     const { selectedPhoto } = useOutletContext()
+    const { topScores } = useOutletContext()
     const [highScoreData, setHighScoreData] = useState([])
 
     // useeffect to return all high scores
-    useEffect(() => {
-        if(selectedPhoto===2) {
-            setHighScoreData(townHighScores)
-        } else if(selectedPhoto===3) {
-            setHighScoreData(beachHighScores)
-        } else if(selectedPhoto===4) {
-            setHighScoreData(conventionHighScores)
-        }
-    }, []);
+    // useEffect(() => {
+    //     if(selectedPhoto===2) {
+    //         setHighScoreData(townHighScores)
+    //     } else if(selectedPhoto===3) {
+    //         setHighScoreData(beachHighScores)
+    //     } else if(selectedPhoto===4) {
+    //         setHighScoreData(conventionHighScores)
+    //     }
+    // }, []);
 
     console.log(highScoreData)
 
@@ -29,7 +30,7 @@ export default function HighScoreList() {
             <h1>High Scores</h1>
             <ol className="high-score-list">
                 {/* map the scores */}
-                { highScoreData.map((score, index) => (
+                { topScores.map((score, index) => (
                     <b><li className="high-score-list-item">{ score.name }: { score.score } seconds.</li></b> 
                 ))}
             </ol>

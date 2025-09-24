@@ -60,7 +60,7 @@ export const beachHighScores = [
     {
         name: 'geoff',
         username: 'geoff',
-        score: 50,
+        score: 30,
     }
 ]
 
